@@ -2,7 +2,8 @@
 
 import React from "react";
 import { Provider } from "react-redux";
-import { store } from "./store";
+import { store } from "../app/store";
+import { SessionProvider } from "next-auth/react";
 
 export function Providers({
     children,
@@ -12,7 +13,9 @@ export function Providers({
 ) {
   return (
     <Provider store={store}>
-      {children}
+      <SessionProvider>
+        {children}
+      </SessionProvider>
     </Provider>
   );
 };
