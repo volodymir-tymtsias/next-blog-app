@@ -6,9 +6,9 @@ export const metadata: Metadata = {
   title: "Blog | Next App",
 };
 
-export default function Blog() {
-  
+export const revalidate = 10;
 
+export default function Blog() {
   return (
     <>
       <h1>Blog page</h1>

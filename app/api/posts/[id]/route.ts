@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { headers, cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { posts } from "../posts";
 
 export async function DELETE(
   req: Request,
@@ -18,4 +19,15 @@ export async function DELETE(
   // redirect('/blog');
 
   return NextResponse.json({id, type, coo2});
+};
+
+export async function GET(
+  req: Request,
+  { params }: { params: { id: string }},
+) {
+  const id = params.id;
+  const currentPost = posts.find(post => post.id === +id);
+
+
+  return NextResponse.json(currentPost);
 };
