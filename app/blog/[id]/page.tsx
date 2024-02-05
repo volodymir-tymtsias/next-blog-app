@@ -1,5 +1,8 @@
 import { Metadata } from "next";
-import { getAllPosts, getPostsById } from "@/services/getPosts";
+import { getAllPosts, getPostById } from "@/services/getPosts";
+import Link from "next/link";
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 type Props = {
   params: {
@@ -19,21 +22,39 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params: { id },
 }: Props): Promise<Metadata> {
-  const post = await getPostsById(id);
+  const post = await getPostById(id);
 
   return {
     title: post.title,
   };
 }
 
+async function removePost(id: string) {
+  "use server";
+  await fetch(`http://localhost:3300/posts/${id}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  revalidatePath("/blog");
+  redirect("/blog");
+}
+
 export default async function Post({ params: { id } }: Props) {
-  const post = await getPostsById(id);
-  console.log(post);
+  const post = await getPostById(id);
 
   return (
     <>
       <h1>{post.title}</h1>
       <p>{post.body}</p>
+
+      <form action={removePost.bind(null, id)}>
+        <input type="submit" value="delete post" />
+      </form>
+
+      <Link href={`/blog/${id}/edit`}>Edit</Link>
     </>
   );
 }

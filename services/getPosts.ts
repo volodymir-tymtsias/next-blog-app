@@ -20,7 +20,7 @@ export const getPostsBySearch = async (search: string) => {
   return response.json();
 };
 
-export const getPostsById = async (id: string) => {
+export const getPostById = async (id: string) => {
   const response = await fetch(
      `https://jsonplaceholder.typicode.com/posts/${id}`
   );
